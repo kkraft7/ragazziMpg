@@ -1,0 +1,75 @@
+<html>
+<head>
+  <title>Ragazzi MPG Calculator</title>
+</head>
+
+<!-- http://www.dummies.com/how-to/content/how-to-manage-text-input-and-output-with-javascrip.html -->
+<!-- Add a clear button? -->
+<!-- Try saving the data I enter? Writing a simple client? REST-based? -->
+<body>
+  Writing results to an input field via a button:
+  <form onsubmit="return false;">
+    <input type="number" name="mpg6_1" step="any" min="0"/>
+    <input type="number" name="mpg6_2" step="any" min="0"/>
+    <button onclick="displayMpgInField( mpg6_1.value, mpg6_2.value, 'display1' )">Calculate MPG</button>
+    Average MPG: <input type="text" id="display1"/>
+  </form>
+
+  Writing results to an input field via submit:
+  <form onsubmit="displayMpgInField( mpg5_1.value, mpg5_2.value, 'display2' ); return false;">
+    <input type="number" id="mpg5_1" step="any" min="0"/>
+    <input type="number" id="mpg5_2" step="any" min="0"/>
+    <input type="submit"/>
+    Average MPG: <input type="text" id="display2"/>
+  </form>
+
+  Writing results to a span element via submit:
+  <form onsubmit="displayMpgInTag( mpg4_1.value, mpg4_2.value, 'display3' ); return false;">
+    <input type="number" id="mpg4_1" step="any" min="0"/>
+    <input type="number" id="mpg4_2" step="any" min="0"/>
+    <input type="submit"/>
+  </form>
+  Average MPG: <span id="display3"/></span></body><br><br>
+
+  Writing results to an output field via submit:
+  <form onsubmit="total3.value=calculateMpg( mpg3_1.value, mpg3_2.value ); return false;">
+    <input type="number" id="mpg3_1" step="any" min="0"/>
+    <input type="number" id="mpg3_2" step="any" min="0"/>
+    <input type="submit">
+    Average MPG: <output name="total3"></output> <!-- Apparently the closing tag is required in some browsers -->
+  </form>
+
+  Writing results to an output field via oninput:
+  <form oninput="total2.value=calculateMpg( mpg2_1.value, mpg2_2.value )">
+    <input type="number" id="mpg2_1" step="any" min="0"/>
+    <input type="number" id="mpg2_2" step="any" min="0"/>
+    <output name="total2"></output> <!-- Apparently the closing tag is required in some browsers -->
+  </form>
+
+  Writing results to a popup window:
+  <form>
+    <input type="number" name="mpg1_1" step="any" min="0"/>
+    <input type="number" name="mpg1_2" step="any" min="0"/>
+    <button onclick="displayMpgInPopup( mpg1_1.value, mpg1_2.value )">Calculate MPG</button>
+  </form>
+
+  <script>
+    // Calculate mileage home when picking up Andrew from Ragazzi (using constants for the two legs of the journey).
+    function calculateMpg( mpg1, mpg2 ) {
+      return (8.6 / 14) * mpg1 + (5.4 / 14 ) * mpg2;
+    }
+
+    function displayMpgInTag( mpg1, mpg2, elem_id ) {
+      document.getElementById( elem_id ).innerHTML = calculateMpg( mpg1, mpg2 );
+    }
+
+    function displayMpgInField( mpg1, mpg2, elem_id ) {
+      document.getElementById( elem_id ).value = calculateMpg( mpg1, mpg2 );
+    }
+
+    function displayMpgInPopup( mpg1, mpg2 ) {
+      window.alert( "MPG = " + calculateMpg( mpg1, mpg2 ));
+    }
+  </script>
+</body>
+</html>
