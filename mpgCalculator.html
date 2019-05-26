@@ -1,12 +1,19 @@
 <html>
 <head>
-  <title>Ragazzi MPG Calculator</title>
+  <title>MPG Calculator</title>
 </head>
 
 <!-- http://www.dummies.com/how-to/content/how-to-manage-text-input-and-output-with-javascrip.html -->
 <!-- Add a clear button? -->
 <!-- Try saving the data I enter? Writing a simple client? REST-based? -->
 <body>
+  Select Route:
+  <select name="route" id="route">
+    <option value="ragazzi">Ragazzi</option>
+    <option value="roundtable">Roundtable</option>
+    <option value="chef-kwan">Chef Kwan's</option>
+  </select><br><br>
+
   Writing results to an input field via a button:
   <form onsubmit="return false;">
     <input type="number" name="mpg6_1" step="any" min="0"/>
@@ -32,7 +39,7 @@
   Average MPG: <span id="display3"/></span></body><br><br>
 
   Writing results to an output field via submit:
-  <form onsubmit="total3.value=calculateMpg( mpg3_1.value, mpg3_2.value ); return false;">
+  <form onsubmit="total3.value=calculateMpg([ mpg3_1.value, mpg3_2.value ]); return false;">
     <input type="number" id="mpg3_1" step="any" min="0"/>
     <input type="number" id="mpg3_2" step="any" min="0"/>
     <input type="submit">
@@ -40,7 +47,7 @@
   </form>
 
   Writing results to an output field via oninput:
-  <form oninput="total2.value=calculateMpg( mpg2_1.value, mpg2_2.value )">
+  <form oninput="total2.value=calculateMpg([ mpg2_1.value, mpg2_2.value ])">
     <input type="number" id="mpg2_1" step="any" min="0"/>
     <input type="number" id="mpg2_2" step="any" min="0"/>
     <output name="total2"></output> <!-- Apparently the closing tag is required in some browsers -->
@@ -54,21 +61,40 @@
   </form>
 
   <script>
+    var distances = {
+        "ragazzi": [ 8.6, 5.4 ],
+        "roundtable": [ 12.0, 2.0 ],
+        "chef-kwan": [ 12.2, 1.9 ]
+    };
+
+    function getDistances() {
+        var routeMenu = document.getElementById( 'route' );
+        var distanceKey = routeMenu.options[routeMenu.selectedIndex].value;
+        return distances[distanceKey];
+    }
+
     // Calculate mileage home when picking up Andrew from Ragazzi (using constants for the two legs of the journey).
-    function calculateMpg( mpg1, mpg2 ) {
-      return (8.6 / 14) * mpg1 + (5.4 / 14 ) * mpg2;
+    function calculateMpg( mpgData ) {
+      var distances = getDistances();
+      var total = 0;
+      var totalDistance = 0;
+      for ( i = 0; i < distances.length; i++ ) {
+        total += distances[i] * mpgData[i];
+        totalDistance += distances[i];
+      }
+      return total / totalDistance;
     }
 
     function displayMpgInTag( mpg1, mpg2, elem_id ) {
-      document.getElementById( elem_id ).innerHTML = calculateMpg( mpg1, mpg2 );
+      document.getElementById( elem_id ).innerHTML = calculateMpg([ mpg1, mpg2 ]);
     }
 
     function displayMpgInField( mpg1, mpg2, elem_id ) {
-      document.getElementById( elem_id ).value = calculateMpg( mpg1, mpg2 );
+      document.getElementById( elem_id ).value = calculateMpg([ mpg1, mpg2 ]);
     }
 
     function displayMpgInPopup( mpg1, mpg2 ) {
-      window.alert( "MPG = " + calculateMpg( mpg1, mpg2 ));
+      window.alert( "MPG = " + calculateMpg([ mpg1, mpg2 ]));
     }
   </script>
 </body>
